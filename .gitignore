@@ -1,2 +1,1 @@
-# ignore Yocto
-# sources/yocto
+sources/yocto/*
