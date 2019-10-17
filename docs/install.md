@@ -12,7 +12,7 @@ now you have to modify bblayers.conf and local.conf
 
 to modify bblayers.conf :
 ```bash
-bitbake-layers remove-layer ../meta-yocto
+bitbake-layers remove-layer ../meta-poky
 bitbake-layers remove-layer ../meta-yocto-bsp
 bitbake-layers add-layer ../../meta-raspberrypi
 bitbake-layers add-layer ../../meta-homeautomation
