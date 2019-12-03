@@ -1,0 +1,22 @@
+From 9c1887e837fdc6c8470f8e957755d8eb664e3f6a Mon Sep 17 00:00:00 2001
+From: Gidon Remi <gidon.e1901995@etud.univ-ubs.fr>
+Date: Tue, 22 Oct 2019 21:27:23 +0200
+Subject: [PATCH] CONFIG_OF_SEPARATE in include/configs/rpi.h
+
+---
+ include/configs/rpi.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/configs/rpi.h b/include/configs/rpi.h
+index 9ce41767a9..d4a1b06095 100644
+--- a/include/configs/rpi.h
++++ b/include/configs/rpi.h
+@@ -9,6 +9,8 @@
+ #include <linux/sizes.h>
+ #include <asm/arch/timer.h>
+ 
++#define CONFIG_OF_SEPARATE
++
+ #if defined(CONFIG_TARGET_RPI_2) || defined(CONFIG_TARGET_RPI_3_32B)
+ #define CONFIG_SKIP_LOWLEVEL_INIT
+ #endif
