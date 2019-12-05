@@ -1,5 +1,4 @@
-#       $OpenBSD: sshd_config,v 1.102 2018/02/16 02:32:40 djm Exp $
-# conf modify
+#	$OpenBSD: sshd_config,v 1.102 2018/02/16 02:32:40 djm Exp $
 
 # This is the sshd server system-wide configuration file.  See
 # sshd_config(5) for more information.
@@ -11,8 +10,8 @@
 # possible, but leave them commented.  Uncommented options override the
 # default value.
 
-Port 49513
-#AddressFamily all
+#Port 22
+#AddressFamily any
 #ListenAddress 0.0.0.0
 #ListenAddress ::
 
@@ -30,16 +29,16 @@ Port 49513
 # Authentication:
 
 #LoginGraceTime 2m
-PermitRootLogin yes
+#PermitRootLogin prohibit-password
 #StrictModes yes
-MaxAuthTries 3
+#MaxAuthTries 6
 #MaxSessions 10
 
 #PubkeyAuthentication yes
 
 # The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
 # but this is overridden so installations will only check .ssh/authorized_keys
-AuthorizedKeysFile      .ssh/authorized_keys
+AuthorizedKeysFile	.ssh/authorized_keys
 
 #AuthorizedPrincipalsFile none
 
@@ -55,8 +54,8 @@ AuthorizedKeysFile      .ssh/authorized_keys
 #IgnoreRhosts yes
 
 # To disable tunneled clear text passwords, change to no here!
-#PasswordAuthentication yes
-PermitEmptyPasswords yes
+PasswordAuthentication yes
+#PermitEmptyPasswords no
 
 # Change to yes to enable challenge-response passwords (beware issues with
 # some PAM modules and threads)
@@ -77,46 +76,44 @@ ChallengeResponseAuthentication no
 # be allowed through the ChallengeResponseAuthentication and
 # PasswordAuthentication.  Depending on your PAM configuration,
 # PAM authentication via ChallengeResponseAuthentication may bypass
-# be allowed through the ChallengeResponseAuthentication and              
-# PasswordAuthentication.  Depending on your PAM configuration,           
-# PAM authentication via ChallengeResponseAuthentication may bypass       
-# the setting of "PermitRootLogin without-password".                 
-# If you just want the PAM account and session checks to run without   
-# PAM authentication, then enable this but set PasswordAuthentication      
-# and ChallengeResponseAuthentication to 'no'.                             
-#UsePAM no                                                             
+# the setting of "PermitRootLogin without-password".
+# If you just want the PAM account and session checks to run without
+# PAM authentication, then enable this but set PasswordAuthentication
+# and ChallengeResponseAuthentication to 'no'.
+#UsePAM no
+
+#AllowAgentForwarding yes
+#AllowTcpForwarding yes
+#GatewayPorts no
+#X11Forwarding no
+#X11DisplayOffset 10
+#X11UseLocalhost yes
+#PermitTTY yes
+#PrintMotd yes
+#PrintLastLog yes
+#TCPKeepAlive yes
+#UseLogin no
+#PermitUserEnvironment no
+Compression no
+ClientAliveInterval 15
+ClientAliveCountMax 4
+#UseDNS no
+#PidFile /var/run/sshd.pid
+#MaxStartups 10:30:100
+#PermitTunnel no
+#ChrootDirectory none
+#VersionAddendum none
+
+# no default banner path
+#Banner none
+
+# override default of no subsystems
+Subsystem	sftp	/usr/libexec/sftp-server
+
+# Example of overriding settings on a per-user basis
+#Match User anoncvs
+#	X11Forwarding no
+#	AllowTcpForwarding no
+#	PermitTTY no
+#	ForceCommand cvs server
                                                                              
-#AllowAgentForwarding yes                                                     
-#AllowTcpForwarding yes                                                       
-#GatewayPorts no                                                     
-X11Forwarding yes                                                    
-#X11DisplayOffset 10                                                 
-#X11UseLocalhost yes                                                 
-#PermitTTY yes                                                       
-#PrintMotd yes                                                       
-#PrintLastLog yes                                                          
-#TCPKeepAlive yes                                                          
-#UseLogin no                                                         
-#PermitUserEnvironment no                                                    
-Compression no                                                                
-ClientAliveInterval 15                                                        
-ClientAliveCountMax 4                                                         
-#UseDNS no                                                                    
-#PidFile /var/run/sshd.pid                                                    
-#MaxStartups 10:30:100                                              
-#PermitTunnel no                                                     
-#ChrootDirectory none                         
-#VersionAddendum none                                                      
-                                                                           
-# no default banner path                                                   
-#Banner none                                                               
-                                                                           
-# override default of no subsystems                            
-Subsystem       sftp    /usr/libexec/sftp-server                             
-                                                                              
-# Example of overriding settings on a per-user basis                          
-#Match User anoncvs                                                           
-#       X11Forwarding no                                                      
-#       AllowTcpForwarding no                                 
-#       PermitTTY no                                                      
-#       ForceCommand cvs server
