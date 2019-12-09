@@ -2,7 +2,7 @@
 
 # SSH server
 
-## Configuration file
+## Add server
 
 In `homeautomation/src/meta-homeautomation/conf/distro/include` we created the file `server-openssh.inc`
 
@@ -15,7 +15,7 @@ Add [openssh server recipe](https://git.yoctoproject.org/cgit.cgi/poky/plain/met
 IMAGE_INSTALL_append = " openssh" 
 ```
 
-## Add configuration file to the distribution
+### Add configuration file to the distribution
 
 In the file `homeautomation/src/meta-homeautomation/conf/distro/homeautomation.conf`
 
@@ -25,7 +25,7 @@ In the section `# include for features files` add
 require conf/distro/include/server-openssh.inc
 ```
 
-## Modification of basic configuration
+### Add basic configuration
 
 We obviously need to make our own configuration so wee have to override the [original configuration file](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-connectivity/openssh/openssh/sshd_config) called `sshd_config`.
 
@@ -43,15 +43,16 @@ In this group of recipes we create the openssh recipe
 mkdir openshh
 cd openshh
 ```
-In this recipe we create an openssh directory with a basic copy of `sshd_config`
+In this recipe we create an openssh directory with two files `sshd_config` and `sshd.socket`.
 
 ```bash
 mkdir openshh
 touch openshh/sshd_config
+touch openshh/sshd.socket
 ```
-Copy [sshd_config](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-connectivity/openssh/openssh/sshd_config) in `openshh/sshd_config`.
+Copy [sshd_config](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-connectivity/openssh/openssh/sshd_config) in `openshh/sshd_config` and [sshd.socket](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-connectivity/openssh/openssh/sshd.socket) in `openshh/sshd.socket`.
 
-Then add a .bbappend file to overrride the basic recipe.
+Then add a .bbappend file to override the basic recipe.
 
 ```bash
 touch openssh_7.9p1.bbappend
@@ -64,6 +65,82 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 ```
 
 This commande add to the openssh recipe the source directory called `${THISDIR}/${PN}`. `${THISDIR}` is `.` and `${PN}` is the *Package Name* egual as *Recipe Name* "openssh". Finaly the extra path is `./openssh` where is stored `sshd_config`.
+
+### Modification of basic configuration
+
+In `sshd_config` we change 
+
+- port : 22 -> 49513
+- MaxAuthTries : 6 -> 3
+- MaxSessions : 10 -> 1
+- PasswordAuthentication : yes -> no
+
+If you modify the default port in `sshd_config` :
+- Take a new port between 49 152 and 65 535.
+- Modify `sshd.socket`.
+	- ListenStream=22 -> 49513
+
+
+
+## Add Keys
+
+Complete `homeautomation/src/meta-homeautomation/conf/distro/include/server-openssh.inc` file to add the recipe to use our personals keys :
+
+```bash
+IMAGE_INSTALL_append = " ssh-keys-server"
+```
+
+Creation of the recipes pakage in `homeautomation/src/meta-homeautomation/recipes-connectivity`
+
+```bash
+mkdir ssh-keys
+cd ssh-keys
+touch ssh-keys_0.1.bb
+mkdir ssh-keys-0.1
+```
+### Recipe creation
+
+Now we have the recipe file `ssh-keys_0.1.bb` witch have to put in a .ssh directory all authorized keys.
+
+So now complete `ssh-keys_0.1.bb` :
+
+```bash
+DESCRIPTION = "add ssh administrator's key to authorized keys"
+
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+```
+
+Then add the public key in the root file system
+
+```bash
+S = "${WORKDIR}"
+SRC_URI = "file://keys.pub \
+          "
+
+ADMIN1="homeautomationadmin"
+
+do_install() {
+        install -d ${D}/home/${ADMIN1}/.ssh/
+        install -m 0755 ${S}/keys.pub ${D}/home/${ADMIN1}/.ssh/authorized_keys
+}
+```
+
+Finaly create the package to install
+
+```bash
+PACKAGES += "${PN}-server"
+FILES_${PN}-server += "/home/${ADMIN1}/.ssh/authorized_keys"
+```
+
+### adding keys
+
+To add your own keys create in `ssh-keys/ssh-keys-0.1` a file called `keys.pub` where public keys will be 
+
+
+
+
+
 
 
 

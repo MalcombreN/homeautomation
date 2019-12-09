@@ -1,19 +1,20 @@
-DESCRIPTION = "ssh private & public key packages"
+DESCRIPTION = "add ssh administrator's key to authorized keys"
+
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-SRC_URI = " file://serv_key_rsa.pub \
+SRC_URI = "file://keys.pub.pub \
           "
 S = "${WORKDIR}"
 
-USER="homeautomationadmin"
+ADMIN1="homeautomationadmin"
 
 do_install() {
-    install -d ${D}/home/${USER}/.ssh/    
-    install -m 0755 ${S}/serv_key_rsa.pub ${D}/home/${USER}/.ssh/authorized_keys
+        install -d ${D}/home/${ADMIN1}/.ssh/
+        install -m 0755 ${S}/keys.pub ${D}/home/${ADMIN1}/.ssh/authorized_keys
 }
 
-PACKAGES += "${PN}-client ${PN}-server"
+PACKAGES += "${PN}-server"
 
-FILES_${PN}-client += "/home/${USER}/.ssh/serv_key_rsa.pub"
-FILES_${PN}-server += "/home/${USER}/.ssh/authorized_keys"
+FILES_${PN}-server += "/home/${ADMIN1}/.ssh/authorized_keys"
+
