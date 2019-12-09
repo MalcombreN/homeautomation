@@ -1,0 +1,22 @@
+From 7ea8d83ad6a035691bd0f242283c23b4062f0457 Mon Sep 17 00:00:00 2001
+From: Gidon Remi <gidon.e1901995@etud.univ-ubs.fr>
+Date: Fri, 6 Dec 2019 13:16:18 +0100
+Subject: [PATCH] CONFIG FIT in configs/rpi_3_defconfig
+
+---
+ configs/rpi_3_defconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/configs/rpi_3_defconfig b/configs/rpi_3_defconfig
+index ea40351dc4..2ab3a200f1 100644
+--- a/configs/rpi_3_defconfig
++++ b/configs/rpi_3_defconfig
+@@ -41,3 +41,8 @@ CONFIG_SYS_WHITE_ON_BLACK=y
+ CONFIG_CONSOLE_SCROLL_LINES=10
+ CONFIG_PHYS_TO_BUS=y
+ CONFIG_OF_LIBFDT_OVERLAY=y
++
++CONFIG_OF_SEPARATE=y
++CONFIG_FIT=y
++CONFIG_FIT_SIGNATURE=y
++CONFIG_RSA=y

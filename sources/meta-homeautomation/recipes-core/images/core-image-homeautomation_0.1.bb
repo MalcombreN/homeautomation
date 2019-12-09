@@ -1,4 +1,5 @@
-include recipes-core/images/core-image-minimal.bb
+# include recipes-core/images/core-image-minimal.bb
+inherit core-image
 
 # inherit kernel-devicetree
 
