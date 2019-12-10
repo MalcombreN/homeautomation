@@ -1,4 +1,4 @@
-<!-- realized on 4/12/2019 by MALCOMBRE Nicolas -->
+<!-- realized on 8/12/2019 by MALCOMBRE Nicolas -->
 
 # SSH server
 
@@ -75,10 +75,12 @@ In `sshd_config` we change
 - MaxSessions : 10 -> 1
 - PasswordAuthentication : yes -> no
 
+And we add `HostKeyAlgorithms ssh-rsa` before `HostKey /etc/ssh/ssh_host_rsa_key` to signifie that we want to send to the ssh-client a rsa-key. For more information see **Add Keys** section and **Add Hostkey** [subsection](#Add).
+
 If you modify the default port in `sshd_config` :
 - Take a new port between 49 152 and 65 535.
 - Modify `sshd.socket`.
-	- ListenStream=22 -> 49513
+	- ListenStream=22 -> *newport*
 
 
 
@@ -132,14 +134,21 @@ Finaly create the package to install
 PACKAGES += "${PN}-server"
 FILES_${PN}-server += "/home/${ADMIN1}/.ssh/authorized_keys"
 ```
+### generate keys
 
-### adding keys
+To generate rsa key we use **ssh-keygen**
 
-To add your own keys create in `ssh-keys/ssh-keys-0.1` a file called `keys.pub` where public keys will be 
+```bash
+ssh-keygen -t rsa -f rpi3bplus
+```
 
+### adding administrator keys
 
+To add your own keys create in `ssh-keys/ssh-keys-0.1` a file called `keys.pub` where public keys will be. 
+The previous generated **public** key *rpi3bplus.pub* have to be copy in `keys.pub` file.
+The previous generated **private** key *rpi3bplus* have to be put in the administrator's pc in the directory `~/.ssh/`.
 
-
+### (#Add) 
 
 
 
