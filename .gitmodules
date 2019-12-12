@@ -1,0 +1,8 @@
+[submodule "sources/yocto"]
+	path = sources/yocto
+	url = git://git.yoctoproject.org/poky
+	branch = warrior
+[submodule "sources/meta-raspberrypi"]
+	path = sources/meta-raspberrypi
+	url = https://github.com/agherzan/meta-raspberrypi.git
+	branch = warrior
