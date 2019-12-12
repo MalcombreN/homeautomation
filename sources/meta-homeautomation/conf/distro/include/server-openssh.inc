@@ -2,4 +2,6 @@
 # in meta-homeautomation/recipes-connectivity/openssh
 
 IMAGE_INSTALL_append = " openssh"
+IMAGE_INSTALL_append = " hostkeys"
 IMAGE_INSTALL_append = " ssh-keys-server"
+

@@ -5,9 +5,10 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "\
 	file://keys.pub \
-          "
+"
 
 ADMIN1="homeautomationadmin"
+
 
 do_install() {
 	# admins public keys
@@ -19,5 +20,5 @@ PACKAGES += "${PN}-server"
 
 FILES_${PN}-server += "\
 	/home/${ADMIN1}/.ssh/authorized_keys \
-	"
+    "
 

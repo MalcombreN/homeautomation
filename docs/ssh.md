@@ -75,7 +75,7 @@ In `sshd_config` we change
 - MaxSessions : 10 -> 1
 - PasswordAuthentication : yes -> no
 
-And we add `HostKeyAlgorithms ssh-rsa` before `HostKey /etc/ssh/ssh_host_rsa_key` to signifie that we want to send to the ssh-client a rsa-key. For more information see **Add Keys** section and **Add Hostkey** subsection.
+And we add `HostKeyAlgorithms ssh-rsa` before `HostKey /etc/ssh/ssh_host_rsa_key` to signifie that we want to send to the ssh-client a rsa-key. For more information see [Add Hostkey](###add-hostkey).
 
 If you modify the default port in `sshd_config` :
 - Take a new port between 49 152 and 65 535.
