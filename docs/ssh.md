@@ -54,10 +54,10 @@ Copy [sshd_config](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes
 Then add a .bbappend file to override the basic recipe.
 
 ```bash
-touch openssh_7.9p1.bbappend
+touch openssh_%.bbappend
 ```
 
-In `openssh_7.9p1.bbappend` write 
+In `openssh_%.bbappend` write 
 
 ```bash
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
@@ -100,8 +100,7 @@ mkdir hostkeys
 ```
 ### Recipe creation
 
-Now we have the recipe file `hostkeys_0.1.bb`. This recipe have to put in `/etc/ssh` directory the *ssh_host_rsa_key*.
-
+Now we have the recipe file `hostkeys_0.1.bb`. This recipe have to put in `/etc/ssh` directory the *ssh_host_rsa_key*.  
 So now complete `hostkeys_0.1.bb` :
 
 ```bash
@@ -138,17 +137,10 @@ FILES_${PN} += "\
 ```
 ### generate keys
 
-To generate rsa key we use **ssh-keygen** as root in `hostkeys/hostkeys/` directory.
+To generate rsa key we use **ssh-keygen** in `hostkeys/hostkeys/` directory.
 
 ```bash
 ssh-keygen -t rsa -f "ssh_host_rsa_key" -N ''
-```
-
-bitbake can't be executed as root and then manipulate your generated private key.
-So you have to define you as the key's ownner with this commande as root.
-
-```bash
-chown <your-user-name> ./ssh_host_rsa_key*
 ```
 
 ## Add Keys
@@ -169,8 +161,7 @@ mkdir ssh-keys-0.1
 ```
 ### Recipe creation
 
-Now we have the recipe file `ssh-keys_0.1.bb` witch have to put in a .ssh directory all authorized keys.
-
+Now we have the recipe file `ssh-keys_0.1.bb` witch have to put in a .ssh directory all authorized keys.  
 So now complete `ssh-keys_0.1.bb` :
 
 ```bash
@@ -206,7 +197,7 @@ FILES_${PN}-server += "\
 ```
 ### generate keys
 
-To generate rsa key we use **ssh-keygen** as root
+To generate rsa key we use **ssh-keygen**
 
 ```bash
 ssh-keygen -t rsa -f rpi3bplus
@@ -214,9 +205,9 @@ ssh-keygen -t rsa -f rpi3bplus
 
 ### adding administrator keys
 
-To add your own keys create in `ssh-keys/ssh-keys-0.1` a file called `keys.pub` where public keys will be. 
-The previous generated **public** key *rpi3bplus.pub* have to be copy in `keys.pub` file.
-The previous generated **private** key *rpi3bplus* have to be put in the administrator's pc in the directory `~/.ssh/`.
+To add your own keys create in `ssh-keys/ssh-keys-0.1` a file called `keys.pub` where public keys will be.  
+The previous generated **public** key *rpi3bplus.pub* have to be copy in `keys.pub` file.  
+The previous generated **private** key *rpi3bplus* have to be put in the administrator's pc in the directory `~/.ssh/`.  
 
 
 
