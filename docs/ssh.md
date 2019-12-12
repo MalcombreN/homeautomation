@@ -1,21 +1,10 @@
-<!-- realized on 8/12/2019 by MALCOMBRE Nicolas -->
+<!-- realized on 12/12/2019 by MALCOMBRE Nicolas -->
 
 # SSH server
 
-## Add server
+## Add configuration file to the distribution
 
 In `homeautomation/src/meta-homeautomation/conf/distro/include` we created the file `server-openssh.inc`
-
-To complete `server-openssh.inc` file :
-
-
-Add [openssh server recipe](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-connectivity/openssh/) to use the basic openshh server and configuration 
-
-```bash
-IMAGE_INSTALL_append = " openssh" 
-```
-
-### Add configuration file to the distribution
 
 In the file `homeautomation/src/meta-homeautomation/conf/distro/homeautomation.conf`
 
@@ -25,11 +14,21 @@ In the section `# include for features files` add
 require conf/distro/include/server-openssh.inc
 ```
 
+## Add server
+
+To complete `homeautomation/src/meta-homeautomation/conf/distro/include/server-openssh.inc` file :
+
+Add [openssh server recipe](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-connectivity/openssh/) package to use the basic openshh server and configuration 
+
+```bash
+IMAGE_INSTALL_append = " openssh" 
+```
+
 ### Add basic configuration
 
-We obviously need to make our own configuration so wee have to override the [original configuration file](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-connectivity/openssh/openssh/sshd_config) called `sshd_config`.
+We obviously need to make our own configuration. So we have to override the [original configuration file](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-connectivity/openssh/openssh/sshd_config) called `sshd_config`.
 
-To override this file we have to recipe with the same name and structure.
+To override this file, we have to create a recipe with the same name and structure.
 
 Creation of the recipes pakage in `homeautomation/src/meta-homeautomation/`
 
@@ -75,14 +74,82 @@ In `sshd_config` we change
 - MaxSessions : 10 -> 1
 - PasswordAuthentication : yes -> no
 
-And we add `HostKeyAlgorithms ssh-rsa` before `HostKey /etc/ssh/ssh_host_rsa_key` to signifie that we want to send to the ssh-client a rsa-key. For more information see [Add Hostkey](###add-hostkey).
+And we add `HostKeyAlgorithms ssh-rsa` before `HostKey /etc/ssh/ssh_host_rsa_key` to signifie that we want to send to the ssh-client a rsa-key. For more information see [Add Hostkey](#add-hostkey).
 
 If you modify the default port in `sshd_config` :
 - Take a new port between 49 152 and 65 535.
 - Modify `sshd.socket`.
-	- ListenStream=22 -> *newport*
+	- ListenStream=22 -> *new-port*
 
 
+## Add Hostkey
+
+Complete `homeautomation/src/meta-homeautomation/conf/distro/include/server-openssh.inc` file to add the recipe to use our personals keys :
+
+```bash
+IMAGE_INSTALL_append = " hostkeys"
+```
+
+Creation of the recipes pakage in `homeautomation/src/meta-homeautomation/recipes-connectivity`
+
+```bash
+mkdir hostkeys
+cd hostkeys
+touch hostkeys_0.1.bb
+mkdir hostkeys
+```
+### Recipe creation
+
+Now we have the recipe file `hostkeys_0.1.bb`. This recipe have to put in `/etc/ssh` directory the *ssh_host_rsa_key*.
+
+So now complete `hostkeys_0.1.bb` :
+
+```bash
+DESCRIPTION = "add hostkeys to permit boxs authentification by the administrator"
+
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+```
+
+Then add keys in the root file system
+
+```bash
+SRC_URI = "\
+	file://ssh_host_rsa_key.pub \
+	file://ssh_host_rsa_key \
+"
+
+do_install() {
+	# admins public keys
+        install -d ${D}${sysconfdir}/ssh/
+        install -m 0644 ${WORKDIR}/ssh_host_rsa_key.pub ${D}${sysconfdir}/ssh/ssh_host_rsa_key.pub
+	install -m 0600 ${WORKDIR}/ssh_host_rsa_key ${D}${sysconfdir}/ssh/ssh_host_rsa_key
+}
+```
+
+Finaly create the package to install
+
+```bash
+FILES_${PN} += "\
+	${sysconfdir}/ssh \
+	${sysconfdir}/ssh/ssh_host_rsa_key.pub \
+	${sysconfdir}/ssh/ssh_host_rsa_key \
+    "
+```
+### generate keys
+
+To generate rsa key we use **ssh-keygen** as root in `hostkeys/hostkeys/` directory.
+
+```bash
+ssh-keygen -t rsa -f "ssh_host_rsa_key" -N ''
+```
+
+bitbake can't be executed as root and then manipulate your generated private key.
+So you have to define you as the key's ownner with this commande as root.
+
+```bash
+chown <your-user-name> ./ssh_host_rsa_key*
+```
 
 ## Add Keys
 
@@ -117,8 +184,9 @@ Then add the public key in the root file system
 
 ```bash
 S = "${WORKDIR}"
-SRC_URI = "file://keys.pub \
-          "
+SRC_URI = "\
+	file://keys.pub \
+"
 
 ADMIN1="homeautomationadmin"
 
@@ -132,11 +200,13 @@ Finaly create the package to install
 
 ```bash
 PACKAGES += "${PN}-server"
-FILES_${PN}-server += "/home/${ADMIN1}/.ssh/authorized_keys"
+FILES_${PN}-server += "\
+	/home/${ADMIN1}/.ssh/authorized_keys
+"
 ```
 ### generate keys
 
-To generate rsa key we use **ssh-keygen**
+To generate rsa key we use **ssh-keygen** as root
 
 ```bash
 ssh-keygen -t rsa -f rpi3bplus
@@ -148,9 +218,6 @@ To add your own keys create in `ssh-keys/ssh-keys-0.1` a file called `keys.pub` 
 The previous generated **public** key *rpi3bplus.pub* have to be copy in `keys.pub` file.
 The previous generated **private** key *rpi3bplus* have to be put in the administrator's pc in the directory `~/.ssh/`.
 
-### Add Hostkey
-
-?
 
 
 
