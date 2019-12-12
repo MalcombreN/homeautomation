@@ -63,7 +63,7 @@ $ sudo docker run hello-world
 
 [Documentation](https://docs.docker.com/compose/install/)
 
-1. Fetch the current release
+Fetch the current release
 ```bash
 $ sudo curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
@@ -134,10 +134,10 @@ $ ls -R keys-generated
 
 Enable persistent storage for logs & DBs inside docker containers
 ```bash
-docker volume create --name=mender-artifacts
-docker volume create --name=mender-db
-docker volume create --name=mender-elasticsearch-db
-docker volume create --name=mender-redis-db
+$ docker volume create --name=mender-artifacts
+$ docker volume create --name=mender-db
+$ docker volume create --name=mender-elasticsearch-db
+$ docker volume create --name=mender-redis-db
 # inspect a particular volume
 $ docker volume inspect --format '{{.Mountpoint}}' mender-artifacts
 /var/lib/docker/volumes/mender-artifacts/_data
@@ -214,12 +214,12 @@ sahzahPh5eiquohz
 
 1. First we need to run the server
 ```bash
-./run up -d
+$ ./run up -d
 ```
 
 2. Then create our user
 ```bash
-./run exec mender-useradm /usr/bin/useradm create-user --username=homeautomation@example.com --password=homeautomation
+$ ./run exec mender-useradm /usr/bin/useradm create-user --username=homeautomation@example.com --password=homeautomation
 ```
 
 3. Finally navigate to `https://docker.mender.io` and log in
@@ -234,9 +234,9 @@ sahzahPh5eiquohz
 
 ## Install mender repository and dependencies
 ```bash
-cd sources
-git submodule add -b warrior https://github.com/openembedded/meta-openembedded.git meta-openembedded
-git submodule add -b warrior https://github.com/mendersoftware/meta-mender.git meta-mender
+$ cd sources
+$ git submodule add -b warrior https://github.com/openembedded/meta-openembedded.git meta-openembedded
+$ git submodule add -b warrior https://github.com/mendersoftware/meta-mender.git meta-mender
 ```
 
 ## Configuration
@@ -291,20 +291,20 @@ require include/mender.inc
 
 4. Add usefull layers
 ```bash
-cd yocto
-source oe-init-build-env rpi3-build
-bitbake-layers add-layer ../../meta-openembedded/meta-oe
-bitbake-layers add-layer ../../meta-openembedded/meta-python
-bitbake-layers add-layer ../../meta-openembedded/meta-networking
-bitbake-layers add-layer ../../meta-openembedded/meta-multimedia
-bitbake-layers add-layer ../../meta-mender/meta-mender-core
-bitbake-layers add-layer ../../meta-mender/meta-mender-raspberrypi
+$ cd yocto
+$ source oe-init-build-env rpi3-build
+$ bitbake-layers add-layer ../../meta-openembedded/meta-oe
+$ bitbake-layers add-layer ../../meta-openembedded/meta-python
+$ bitbake-layers add-layer ../../meta-openembedded/meta-networking
+$ bitbake-layers add-layer ../../meta-openembedded/meta-multimedia
+$ bitbake-layers add-layer ../../meta-mender/meta-mender-core
+$ bitbake-layers add-layer ../../meta-mender/meta-mender-raspberrypi
 ```
 
 5. Configure network
 
 ```bash
-mkdir -p sources/meta-homeautomation/recipes-core/base-files
+$ mkdir -p sources/meta-homeautomation/recipes-core/base-files
 ```
 Create recipe `sources/meta-homeautomation/recipes-core/base-files/base-files_%.bbappend`
 ```bash
@@ -319,8 +319,8 @@ do_install_append() {
 
 Override `meta-mender/mender` recipe to add the server certificate
 ```bash
-mkdir -p sources/meta-homeautomation/meta-mender/mender/files
-cp server/integration/production/keys-generated/certs/server.crt sources/meta-homeautomation/meta-mender/mender/files
+$ mkdir -p sources/meta-homeautomation/meta-mender/mender/files
+$ cp server/integration/production/keys-generated/certs/server.crt sources/meta-homeautomation/meta-mender/mender/files
 ```
 
 In `sources/meta-homeautomation/meta-mender/mender/mender_%.bbappend`
@@ -328,7 +328,6 @@ In `sources/meta-homeautomation/meta-mender/mender/mender_%.bbappend`
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI_append = " file://server.crt"
 ```
-
 
 # Sign OTA updates
 
@@ -339,27 +338,27 @@ SRC_URI_append = " file://server.crt"
 
 Generate the build system key pair
 ```bash
-cd server/integration/production/keys-generated
-mkdir artifact
-cd artifact
-openssl genpkey -algorithm RSA -out private.key -pkeyopt rsa_keygen_bits:3072
-openssl rsa -in private.key -out private.key
-openssl rsa -in private.key -out public.key -pubout
+$ cd server/integration/production/keys-generated
+$ mkdir artifact
+$ cd artifact
+$ openssl genpkey -algorithm RSA -out private.key -pkeyopt rsa_keygen_bits:3072
+$ openssl rsa -in private.key -out private.key
+$ openssl rsa -in private.key -out public.key -pubout
 ```
 
 Install the `mender-artifact` utility
 ```bash
-cd server
-wget https://d1b0l86ne08fsf.cloudfront.net/mender-artifact/3.2.1/linux/mender-artifact
-chmod +x mender-artifact
+$ cd server
+$ wget https://d1b0l86ne08fsf.cloudfront.net/mender-artifact/3.2.1/linux/mender-artifact
+$ chmod +x mender-artifact
 ```
 
 ## Mender client
 
 Override `meta-mender/mender` recipe to add the artifact signing public key
 ```bash
-mkdir -p sources/meta-homeautomation/meta-mender/mender/files
-cp server/integration/production/keys-generated/artifact/public.key sources/meta-homeautomation/meta-mender/mender/files/artifact-verify-key.pem
+$ mkdir -p sources/meta-homeautomation/meta-mender/mender/files
+$ cp server/integration/production/keys-generated/artifact/public.key sources/meta-homeautomation/meta-mender/mender/files/artifact-verify-key.pem
 ```
 
 In `sources/meta-homeautomation/meta-mender/mender/mender_%.bbappend`
@@ -373,13 +372,13 @@ SRC_URI_append = " file://artifact-verify-key.pem"
 ```bash
 cd server
 # create symlinks to simplify the task
-ln -s sources/yocto/rpi-build/tmp-glibc/deploy/images/raspberrypi3/core-image-homeautomation.mender image.mender
-ln -s server/integration/keys-generated/artifact/private.key artifact.pk
-ln -s server/integration/keys-generated/artifact/public.key artifact.pub
+$ ln -s sources/yocto/rpi-build/tmp-glibc/deploy/images/raspberrypi3/core-image-homeautomation.mender image.mender
+$ ln -s server/integration/keys-generated/artifact/private.key artifact.pk
+$ ln -s server/integration/keys-generated/artifact/public.key artifact.pub
 # sign image
-./mender-artifact sign image.mender -k artifact.pk -o signed.mender
+$ ./mender-artifact sign image.mender -k artifact.pk -o signed.mender
 # verifying signature
-./mender-artifact validate signed -k artifact.pub
+$ ./mender-artifact validate signed -k artifact.pub
 ```
 
 # Device authentication
@@ -430,25 +429,25 @@ $ curl -k -H "Authorization: Bearer $JWT" $MENDER_SERVER_URI/api/management/v1/u
 
 4. Make sure server don't know your device
 ```bash
-curl -k -H "Authorization: Bearer $JWT" $MENDER_SERVER_URI/api/management/v2/devauth/devices | jq '.' | grep 'b8:27:eb:f9:76:5c'
+$ curl -k -H "Authorization: Bearer $JWT" $MENDER_SERVER_URI/api/management/v2/devauth/devices | jq '.' | grep 'b8:27:eb:f9:76:5c'
 ```
 
 If you find a match you must delete their entries first
 ```bash
-curl -k -H "Authorization: Bearer $JWT" -X DELETE $MENDER_SERVER_URI/api/management/v2/devauth/devices/{devID}
+$ curl -k -H "Authorization: Bearer $JWT" -X DELETE $MENDER_SERVER_URI/api/management/v2/devauth/devices/{devID}
 ```
 
 5. Set the preauthorization
 
 ```bash
-DEVICE_IDENTITY_JSON_OBJECT_STRING='{"mac":"b8:27:eb:f9:76:5c"}'
-DEVICE_PUBLIC_KEY="$(cat keys-client-generated/public.key | sed -e :a  -e 'N;s/\n/\\n/;ta')"
-curl -k -H "Authorization: Bearer $JWT" -H "Content-Type: application/json" -X POST -d "{ \"identity_data\" : $DEVICE_IDENTITY_JSON_OBJECT_STRING, \"pubkey\" : \"$DEVICE_PUBLIC_KEY\" }" $MENDER_SERVER_URI/api/management/v2/devauth/devices
+$ DEVICE_IDENTITY_JSON_OBJECT_STRING='{"mac":"b8:27:eb:f9:76:5c"}'
+$ DEVICE_PUBLIC_KEY="$(cat keys-client-generated/public.key | sed -e :a  -e 'N;s/\n/\\n/;ta')"
+$ curl -k -H "Authorization: Bearer $JWT" -H "Content-Type: application/json" -X POST -d "{ \"identity_data\" : $DEVICE_IDENTITY_JSON_OBJECT_STRING, \"pubkey\" : \"$DEVICE_PUBLIC_KEY\" }" $MENDER_SERVER_URI/api/management/v2/devauth/devices
 ```
 
 To verify if it worked
 ```bash
-curl -k -H "Authorization: Bearer $JWT" $MENDER_SERVER_URI/api/management/v2/devauth/devices | jq '.'
+$ curl -k -H "Authorization: Bearer $JWT" $MENDER_SERVER_URI/api/management/v2/devauth/devices | jq '.'
 ```
 Your device should appear with the `preauthorized` status
 
@@ -533,8 +532,8 @@ $ ifconfig eth0 192.168.1.10 netmask 255.255.255.0 up
 
 2. On the server
 ```bash
-ip addr add 192.168.1.1/24 dev eth0
-ip link dev eth0 up
+$ ip addr add 192.168.1.1/24 dev eth0
+$ ip link dev eth0 up
 ```
 
 3. Try the connection
@@ -543,7 +542,6 @@ On the raspberry Pi
 $ ping docker.mender.io
 $ ping 192.168.1.1
 ```
-
 On the server
 ```bash
 $ ping 192.168.1.10
