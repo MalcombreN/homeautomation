@@ -176,14 +176,14 @@ Then add the public key in the root file system
 ```bash
 S = "${WORKDIR}"
 SRC_URI = "\
-	file://keys.pub \
+	file://admin.pub \
 "
 
 ADMIN1="homeautomationadmin"
 
 do_install() {
         install -d ${D}/home/${ADMIN1}/.ssh/
-        install -m 0755 ${S}/keys.pub ${D}/home/${ADMIN1}/.ssh/authorized_keys
+        install -m 0755 ${S}/admin.pub ${D}/home/${ADMIN1}/.ssh/authorized_keys
 }
 ```
 
@@ -200,7 +200,7 @@ FILES_${PN}-server += "\
 To generate rsa key we use **ssh-keygen**
 
 ```bash
-ssh-keygen -t rsa -f rpi3bplus
+ssh-keygen -t rsa -f admin
 ```
 
 ### adding administrator keys
