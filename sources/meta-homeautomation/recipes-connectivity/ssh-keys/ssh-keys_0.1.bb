@@ -4,7 +4,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 SRC_URI = "\
-	file://keys.pub \
+	file://admin.pub \
 "
 
 ADMIN1="homeautomationadmin"
@@ -13,7 +13,7 @@ ADMIN1="homeautomationadmin"
 do_install() {
 	# admins public keys
         install -d ${D}/home/${ADMIN1}/.ssh/
-        install -m 0755 ${WORKDIR}/keys.pub ${D}/home/${ADMIN1}/.ssh/authorized_keys
+        install -m 0755 ${WORKDIR}/admin.pub ${D}/home/${ADMIN1}/.ssh/authorized_keys
 }
 
 PACKAGES += "${PN}-server"
