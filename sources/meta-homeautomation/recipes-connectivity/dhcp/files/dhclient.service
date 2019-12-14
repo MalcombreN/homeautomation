@@ -1,0 +1,11 @@
+[Unit]
+Description=Dynamic Host Configuration Protocol (DHCP)
+Wants=network.target
+Before=network.target
+After=systemd-udevd.service
+
+[Service]
+ExecStart=/sbin/dhclient·-cf·/etc/dhcp/dhclient.conf·-q·-lf·/var/lib/dhcp/dhclient.leases·eth0
+
+[Install]
+WantedBy=multi-user.target
