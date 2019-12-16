@@ -115,8 +115,7 @@ This would also break the compatibility between `Mender` and `U-Boot`, make unst
 
 # Standalone build
 
-[Documentation](https://github.com/ARM-software/u-boot/tree/master/doc/uImage.FIT)
-
+[Documentation](https://github.com/ARM-software/u-boot/tree/master/doc/uImage.FIT)  
 [Tutorial](https://blog.nviso.be/2019/04/01/enabling-verified-boot-on-raspberry-pi-3/)
 
 However, it's possible to understand, configure and build `U-Boot` on it's own, without `Yocto`.  

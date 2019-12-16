@@ -1,5 +1,3 @@
-# Mender.io
-
 # Docker Engine
 
 [Documentation](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
@@ -159,7 +157,7 @@ Changes `aliases` to match our domain name
     ...
 ```
 
-2. minio
+2. minio  
 Generate `minio` `secret key` with `pwgen`
 ```bash
 $ pwgen 16 1
@@ -226,10 +224,8 @@ $ ./run exec mender-useradm /usr/bin/useradm create-user --username=homeautomati
 
 # Client
 
-[Documentation](https://docs.mender.io/2.2/getting-started/on-premise-installation/install-the-mender-client)
-
-[Documentation](https://docs.mender.io/2.2/artifacts/yocto-project/building-for-production)
-
+[Documentation](https://docs.mender.io/2.2/getting-started/on-premise-installation/install-the-mender-client)  
+[Documentation](https://docs.mender.io/2.2/artifacts/yocto-project/building-for-production)  
 [RaspberryPi 3b+ tuto](https://hub.mender.io/t/raspberry-pi-3-model-b-b/57)
 
 ## Install mender repository and dependencies
@@ -331,7 +327,7 @@ SRC_URI_append = " file://server.crt"
 
 # Sign OTA updates
 
-[Documentation](https://docs.mender.io/2.2/artifacts/signing-and-verification)
+[Documentation](https://docs.mender.io/2.2/artifacts/signing-and-verification)  
 [Help](https://docs.mender.io/2.2/artifacts/yocto-project/variables#mender_artifact_verify_key)
 
 ## Build system
@@ -390,7 +386,7 @@ it's unique MAC address and given public key.
 
 ## Server
 
-1. Get the MAC address of the interface used to communicate with the server
+1. On the box, get the MAC address of the interface used to communicate with the server
 For this example, we'll use eth0
 ```bash
 $ cat /sys/class/net/eth0/address
@@ -398,7 +394,7 @@ $ cat /sys/class/net/eth0/address
 b8:27:eb:f9:76:5c
 ```
 
-2. Generate a key pair for the box
+2. Generate a key pair for the box  
 We will use the provided script from mender
 ```bash
 $ cd server/integration/production/keys-generated
@@ -411,7 +407,7 @@ $ ls keys-client-generated
 private.key public.key
 ```
 
-3. Use the server API to preauthorize your device
+3. Use the server API to preauthorize the box
 
 [Documentation](https://docs.mender.io/2.2/server-integration/using-the-apis#set-up-shell-variables-for-curl)
 
@@ -422,22 +418,22 @@ $ JWT=$(curl -k -X POST -u $MENDER_SERVER_USER $MENDER_SERVER_URI/api/management
 $ echo $JWT
 ```
 
-Try calling the API
+4. Try calling the API
 ```bash
 $ curl -k -H "Authorization: Bearer $JWT" $MENDER_SERVER_URI/api/management/v1/useradm/users | jq '.'
 ```
 
-4. Make sure server don't know your device
+5. Make sure server don't know the box
 ```bash
 $ curl -k -H "Authorization: Bearer $JWT" $MENDER_SERVER_URI/api/management/v2/devauth/devices | jq '.' | grep 'b8:27:eb:f9:76:5c'
 ```
 
-If you find a match you must delete their entries first
+6. If you find a match you must delete their entries first
 ```bash
 $ curl -k -H "Authorization: Bearer $JWT" -X DELETE $MENDER_SERVER_URI/api/management/v2/devauth/devices/{devID}
 ```
 
-5. Set the preauthorization
+7. Set the preauthorization
 
 ```bash
 $ DEVICE_IDENTITY_JSON_OBJECT_STRING='{"mac":"b8:27:eb:f9:76:5c"}'
@@ -445,7 +441,7 @@ $ DEVICE_PUBLIC_KEY="$(cat keys-client-generated/public.key | sed -e :a  -e 'N;s
 $ curl -k -H "Authorization: Bearer $JWT" -H "Content-Type: application/json" -X POST -d "{ \"identity_data\" : $DEVICE_IDENTITY_JSON_OBJECT_STRING, \"pubkey\" : \"$DEVICE_PUBLIC_KEY\" }" $MENDER_SERVER_URI/api/management/v2/devauth/devices
 ```
 
-To verify if it worked
+8. To verify if it worked
 ```bash
 $ curl -k -H "Authorization: Bearer $JWT" $MENDER_SERVER_URI/api/management/v2/devauth/devices | jq '.'
 ```
@@ -453,7 +449,7 @@ Your device should appear with the `preauthorized` status
 
 ## Client
 
-We need to copy our generated private key into the box file system  
+We need to copy our generated private key into the box file system.  
 The private key must reside in `/data/mender/mender-agent.pem` (on the data partition)
 
 1. Create the file `sources/meta-homeautomation/recipes-mender/mender/install-box-key.bb`
@@ -528,7 +524,7 @@ On the server
 $ ping 192.168.1.10
 ```
 
-4. Using an internet browser
+4. Using an internet browser  
 Navigate to `https://docker.mender.io`  
 Connect with your credentials  
 Go to the `Devices` tab  
@@ -549,13 +545,13 @@ $ bitbake core-image-homeautomation
 
 3. [Sign the release](#signing-an-artifact)  
 
-4. Upload it to the server
+4. Upload it to the server  
 In `releases` tab drag the signed artifact in the browser
 
-5. Deploy it
+5. Deploy it  
 Press the `create deployment with this release` button in the `releases` tab
 
-6. Update status
+6. Update status  
 In `deployments` tab you can see the deployment status  
 
 If you don't use a DHCP server, you will need to re-log into the raspberry Pi from the UART to [reconfigure the network](#configure-network).
