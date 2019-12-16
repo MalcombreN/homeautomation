@@ -1,7 +1,8 @@
 # Homeautomation
 
 First year cybersecurity degree projet.  
-Main goals are being able to perform (OTA updates)[] and (remote maintenance)[] on a secure yet embedded device.
+Main goals are being able to perform OTA updates and remote maintenance on an embedded yet secure device.
+
 Technologies used :
 * [Yocto](https://yoctoproject.com) to personnalize a [Linux](https://www.linux.org) distribution
 * [Mender](https://mender.io) to perform OTA updates

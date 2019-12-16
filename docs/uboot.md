@@ -33,11 +33,10 @@ require include/verified-boot.inc
 
 ## Enable U-Boot support from the meta-raspberrypi layer
 
-Edit `verified-boot.inc`[1]
+Edit [`verified-boot.inc`](https://meta-raspberrypi.readthedocs.io/en/latest/extra-build-config.html#boot-to-u-boot)
 ```bash
 RPI_USE_U_BOOT = "1"
 ```
-[1](https://meta-raspberrypi.readthedocs.io/en/latest/extra-build-config.html#boot-to-u-boot)
 
 ## U-Boot verification keys
 
@@ -109,10 +108,10 @@ bitbake core-image-homeautomation
 
 # Troubleshooting
 
-The `meta-raspberrypi` BSP layer write the image. Sadly, this layer only supports the old image format and boot system known as uImage (for u-boot images).  
-It could be possible to declare our own image handler (homeautomation:do_image_fit) just to be able to build / partition the image and configure the bootloader correctly.  
-Anyway, we would need to resolve incompatibilities with [mender](mender.md) because it uses it's own images handlers (mender:do_image_sdimg and mender:do_image_mender) that uses the uImage format.  
-This would also break the compatibility between Mender and U-Boot, make unstable the rollback functionnality and block the update or upgrade of U-Boot remotely.
+The `meta-raspberrypi` BSP layer write the image. Sadly, this layer only supports the old image format and boot system known as `uImage` (for u-boot images).  
+It could be possible to declare our own image handler (`homeautomation:do_image_fit`) just to be able to build / partition the image and configure the bootloader correctly.  
+Anyway, we would need to resolve incompatibilities with [`Mender`](mender.md) because it uses it's own images handlers (`mender:do_image_sdimg` and `mender:do_image_mender`) that uses the `uImage` format.  
+This would also break the compatibility between `Mender` and `U-Boot`, make unstable the rollback functionnality and block the update or upgrade of `U-Boot` remotely.
 
 # Standalone build
 
@@ -120,8 +119,8 @@ This would also break the compatibility between Mender and U-Boot, make unstable
 
 [Tutorial](https://blog.nviso.be/2019/04/01/enabling-verified-boot-on-raspberry-pi-3/)
 
-However, it's possible to understand, configure and build U-Boot on it's own, without Yocto.  
-U-Boot is normally made to be configured and built as a component.  
+However, it's possible to understand, configure and build `U-Boot` on it's own, without `Yocto`.  
+`U-Boot` is normally made to be configured and built as a component.  
 
 <!--
 1. Fetch the sources
