@@ -1,3 +1,4 @@
 sources/yocto/*
 server/*
-!server/integration
+!server/keys
+!server/certs
