@@ -51,8 +51,6 @@ This command add the source directory called `${THISDIR}/${PN}`. `${THISDIR}` is
 
 Edit `sshd_config`
 * port : 22 -> 49513 (any number between 49512 and 65535)
-* MaxAuthTries : 6 -> 3
-* MaxSessions : 10 -> 1
 * PasswordAuthentication : yes -> no
 
 And we add `HostKeyAlgorithms ssh-rsa` before `HostKey /etc/ssh/ssh_host_rsa_key` to use a rsa-key.  
