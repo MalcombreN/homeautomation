@@ -33,22 +33,21 @@ Creation of a directory for sources and documentation
 $ mkdir src doc
 ```
 
-Download warrior version of poky from yocto project in sources directory.  
-Then declare it as a git submodule.
+Download `warrior` version of `poky` from yocto project in `src` directory.  
+Then declare it as a **git submodule**. The `git submodule` command automatically download it.
 ```bash
 $ cd src
 $ git submodule add -b warrior https://git.yoctoproject.org/git/poky yocto
 ```
 
-Declare a git submodule for the layer meta-raspberrypi in sources directory.  
-The git submodule command automatically download it.
+Declare a git submodule for the layer `meta-raspberrypi` in sources directory.  
 ```bash
 $ git submodule add -b warrior https://git.yoctoproject.org/git/meta-raspberrypi
 ```
 
 ## Yocto layers setup
 
-Creation of the homeautomation layer
+Creation of the `homeautomation` layer
 ```bash
 $ cd yocto
 $ source oe-init-build-env rpi3-build
@@ -97,7 +96,7 @@ Creation of the directory where configuration of additional distribution feature
 $ mkdir conf/distro/include
 ```
 
-Creation of the core-image
+Creation of the core-image called `core-image-homeautomation`
 ```bash
 $ mkdir -p recipes-core/images
 $ touch recipes-core/images/core-image-homeautomation.bb

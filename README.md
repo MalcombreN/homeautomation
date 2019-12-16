@@ -42,7 +42,10 @@ MACHINE ?= "raspberrypi3"
 DISTRO ?= "homeautomation"
 ```
 
-3. Build 
+3. Set up mender  
+Follow our [mender documentation](docs/mender.md)
+
+4. Build 
 ```bash
 bitbake core-image-homeautomation
 ```
