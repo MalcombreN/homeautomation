@@ -489,31 +489,12 @@ IMAGE_INSTALL_append = " install-box-key"
 
 # Test
 
-Build the `.sdimg` image and `.mender` artifact
+1. Build the `.sdimg` image and `.mender` artifact
 ```bash
 $ bitbake core-image-homeautomation
-# Flash the image on the sdcard
-# Replace sdX with your sdcard device (sdb / mmcblk0 ...)
-$ sudo dd if=sources/yocto/rpi-build/tmp-glibc/deploy/images/raspberrypi/core-image-homeautomation.sdimg of=/dev/sdX bs=1M status=progress && sudo sync
 ```
-
-## Connect to the box using UART
-
-Plug an UART to USB adapter from your machine to the raspberry pi 3b+ using this configuration :
-```bash
-Red     5V          pin 4 (do not plug it if you use external power source)
-Black   GND         pin 6
-White   USB RX      pin 8
-Green   USB TX      pin 10
-```
-
-Then connect to the raspberry pi on from machine
-```bash
-# to find which device is the USB to UART controller
-$ sudo dmesg
-# to connect to the card
-$ sudo minicom -D /dev/ttyUSB0 -b 115200
-```
+2. [Flash](flash.md) it on the card
+3. Log in using [UART](flash.md#connect-to-the-box-using-uart)
 
 ## Configure network
 
@@ -550,7 +531,7 @@ $ ping 192.168.1.10
 4. Using an internet browser
 Navigate to `https://docker.mender.io`  
 Connect with your credentials  
-Go to the `Devices` tab
+Go to the `Devices` tab  
 Wait for you device to synchronize
 
 # Release
