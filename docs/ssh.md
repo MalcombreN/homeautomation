@@ -37,7 +37,7 @@ touch openshh/sshd.socket
 ```
 
 Copy [sshd_config](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-connectivity/openssh/openssh/sshd_config) in `openshh/sshd_config` and [sshd.socket](https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-connectivity/openssh/openssh/sshd.socket) in `openshh/sshd.socket`.  
-Then add a .bbappend file to override the basic recipe.
+Then add a `.bbappend` file to override the basic recipe.
 ```bash
 touch openssh_%.bbappend
 ```
