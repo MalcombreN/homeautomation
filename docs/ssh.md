@@ -115,6 +115,8 @@ To generate rsa key we use `ssh-keygen` in `hostkeys/hostkeys/` directory.
 ssh-keygen -t rsa -f "ssh_host_rsa_key" -N ''
 ```
 
+The `ssh_host_rsa_key.pub` should be copy in `.ssh/known_hosts` file.
+
 # Add Keys
 
 Complete `sources/meta-homeautomation/conf/distro/include/server-openssh.inc` to add the admin keys
