@@ -1,6 +1,6 @@
 # Homeautomation
 
-First year cybersecurity degree projet.  
+First year cybersecurity degree project.  
 Main goals are being able to perform OTA updates and remote maintenance on an embedded yet secure device.
 
 Technologies used :
